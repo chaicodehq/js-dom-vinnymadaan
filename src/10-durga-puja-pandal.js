@@ -90,25 +90,102 @@
  *   // => [pandal1, pandal3] (elements with data-zone="North")
  */
 export function createPandalElement(pandal) {
-  // Your code here
+  if (
+    !pandal ||
+    typeof pandal.name !== "string" ||
+    typeof pandal.zone !== "string" ||
+    typeof pandal.theme !== "string" ||
+    typeof pandal.budget !== "number" ||
+    typeof pandal.rating !== "number"
+  ) {
+    return null
+  }
+
+  const div = document.createElement("div")
+  div.className = "pandal"
+
+  div.dataset.name = pandal.name
+  div.dataset.zone = pandal.zone
+  div.dataset.theme = pandal.theme
+  div.dataset.budget = pandal.budget
+  div.dataset.rating = pandal.rating
+
+  div.textContent = pandal.name
+
+  return div
 }
 
 export function getPandalInfo(element) {
-  // Your code here
+  if (!element) return null
+
+  return {
+    name: element.dataset.name,
+    zone: element.dataset.zone,
+    theme: element.dataset.theme,
+    budget: Number(element.dataset.budget),
+    rating: Number(element.dataset.rating)
+  }
 }
 
 export function updatePandalRating(element, newRating) {
-  // Your code here
+  if (!element) return null
+  if (typeof newRating !== "number" || newRating < 0 || newRating > 5) {
+    return null
+  }
+
+  const oldRating = Number(element.dataset.rating)
+
+  element.dataset.rating = newRating
+
+  return oldRating
 }
 
 export function filterPandalsByZone(container, zone) {
-  // Your code here
+  if (!container || typeof zone !== "string") return []
+
+  const pandals = container.querySelectorAll(".pandal")
+  const result = []
+
+  for (let p of pandals) {
+    if (p.dataset.zone === zone) {
+      result.push(p)
+    }
+  }
+
+  return result
 }
 
 export function getPandalsByBudgetRange(container, min, max) {
-  // Your code here
+  if (!container || typeof min !== "number" || typeof max !== "number") {
+    return []
+  }
+
+  const pandals = container.querySelectorAll(".pandal")
+  const result = []
+
+  for (let p of pandals) {
+    const budget = Number(p.dataset.budget)
+    if (budget >= min && budget <= max) {
+      result.push(p)
+    }
+  }
+
+  return result
 }
 
 export function sortPandalsByRating(container) {
-  // Your code here
+  if (!container) return []
+
+  const pandals = Array.from(container.querySelectorAll(".pandal"))
+
+  pandals.sort((a, b) => {
+    return Number(b.dataset.rating) - Number(a.dataset.rating)
+  })
+
+
+  for (let p of pandals) {
+    container.appendChild(p)
+  }
+
+  return pandals
 }

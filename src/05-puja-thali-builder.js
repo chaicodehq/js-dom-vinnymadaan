@@ -1,3 +1,5 @@
+// import { createElement } from "react"
+
 /**
  * 🪔 Puja Thali Builder - addEventListener & Click Events
  *
@@ -58,17 +60,117 @@
  *   manager.removeItem("Phool"); // => true
  */
 export function setupAddButton(button, thaliElement, itemName) {
-  // Your code here
+  if(!button || !thaliElement || !itemName){
+    return null
+  }
+  function handleClick(){
+    const li = document.createElement("li")
+    li.textContent = itemName
+    thaliElement.appendChild(li)
+  }
+  button.addEventListener("click", handleClick)
+  function cleanup(){
+    button.removeEventListener("click", handleClick)
+  }
+  return cleanup
 }
 
 export function setupRemoveButton(button, thaliElement) {
-  // Your code here
+  if(!button || !thaliElement){
+    return null
+  }
+  function removesLastChild(){
+     if(thaliElement.hasChildNodes()){
+      const lastChild = thaliElement.lastElementChild
+      if(lastChild){
+        lastChild.remove()
+      }
+     } 
+  }
+  button.addEventListener("click", removesLastChild)
+
+  function cleanup(){
+    button.removeEventListener("click", removesLastChild)
+  }
+  return cleanup
 }
 
 export function setupToggleItem(button, thaliElement, itemName) {
-  // Your code here
+  if (!button || !thaliElement || !itemName) {
+    return null
+  }
+
+  function handleClick() {
+    const children = thaliElement.children
+    let foundItem = null
+
+    // search existing item
+    for (let i = 0; i < children.length; i++) {
+      if (children[i].textContent === itemName) {
+        foundItem = children[i]
+        break
+      }
+    }
+
+    if (foundItem) {
+      // remove if exists
+      foundItem.remove()
+    } else {
+      // create if not exists
+      const li = document.createElement("li")
+      li.textContent = itemName
+      thaliElement.appendChild(li)
+    }
+  }
+
+  button.addEventListener("click", handleClick)
+
+  function cleanup() {
+    button.removeEventListener("click", handleClick)
+  }
+
+  return cleanup
 }
 
 export function createThaliManager(thaliElement, counterElement) {
-  // Your code here
+  if (!thaliElement || !counterElement) {
+    return null
+  }
+
+  function updateCounter() {
+    counterElement.textContent = thaliElement.children.length
+  }
+
+  return {
+    addItem(name) {
+      const li = document.createElement("li")
+      li.textContent = name
+      thaliElement.appendChild(li)
+      updateCounter()
+      return li
+    },
+
+    removeItem(name) {
+      const children = thaliElement.children
+
+      for (let i = 0; i < children.length; i++) {
+        if (children[i].textContent === name) {
+          children[i].remove()
+          updateCounter()
+          return true
+        }
+      }
+
+      return false
+    },
+
+    getCount() {
+      return thaliElement.children.length
+    },
+
+    clear() {
+      thaliElement.innerHTML = ""
+      updateCounter()
+    }
+  }
 }

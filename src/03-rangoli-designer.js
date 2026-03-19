@@ -70,25 +70,92 @@
  *   // => ["red", "blue"]
  */
 export function addColors(element, ...colors) {
-  // Your code here
+  if(element === null || element === undefined){
+    return -1
+    
+  }
+  let added = 0;
+
+  colors.forEach(color => {
+
+    if (!element.classList.contains(color)) {
+      element.classList.add(color);
+      added++;
+    }
+
+  });
+
+  return added;
 }
 
 export function removeColors(element, ...colors) {
-  // Your code here
+
+  if (element === null || element === undefined) {
+    return -1
+  }
+
+  let removed = 0
+
+  for (const color of colors) {
+
+    if (element.classList.contains(color)) {
+      element.classList.remove(color)
+      removed++
+    }
+
+  }
+
+  return removed
 }
 
 export function togglePattern(element, pattern) {
-  // Your code here
+  if(element === null || element === undefined){
+    return null
+  }
+  element.classList.toggle(`pattern-${pattern}`)
+  if(element.classList.contains(`pattern-${pattern}`)){
+    return true
+  }else{
+    return false
+  }
 }
 
-export function hasDesign(element, designName) {
-  // Your code here
+export function hasDesign(element, designName) {  
+  if(element === null || element === undefined){
+    return false
+  }
+  if(element.classList.contains(`design-${designName}`)){
+    return true
+  }else{
+    return false
+  }
 }
 
 export function replaceDesign(element, oldDesign, newDesign) {
-  // Your code here
+  if(element === null || element === undefined){
+    return false
+    }
+
+    if(element.classList.contains(`design-${oldDesign}`)){
+      element.classList.remove(`design-${oldDesign}`)
+      element.classList.add(`design-${newDesign}`)
+      return true
+    }else{
+      element.classList.add(`design-${newDesign}`)
+      return false
+  }
 }
 
+
 export function getActiveColors(element) {
-  // Your code here
+  if(element === null || element === undefined){
+    return []
+  }
+  let color = []
+  for(const cl of element.classList){
+    if(cl.startsWith("color-")){
+      color.push(cl.replace("color-", ""))
+    }
+  }
+  return color
 }
